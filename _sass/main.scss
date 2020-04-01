@@ -1,3 +1,10 @@
 .current {
   color: green;
 }
+
+::cue {
+  background: none;
+    color: #fff;
+    text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
+    font-size: medium;
+}

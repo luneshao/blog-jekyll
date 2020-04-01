@@ -679,3 +679,5 @@ JEKYLL_ENV=production bundle exec jekyll build
 ```
 并将_site的内容复制到您的服务器。
 更好的方法是使用CI或第三方来自动执行此过程。
+
+[使用git hooks(post-receive)实现简单的远程自动部署](https://www.imqianduan.com/git-svn/335.html)
