@@ -681,3 +681,55 @@ JEKYLL_ENV=production bundle exec jekyll build
 更好的方法是使用CI或第三方来自动执行此过程。
 
 [使用git hooks(post-receive)实现简单的远程自动部署](https://www.imqianduan.com/git-svn/335.html)
+
+- 第一步、使用ssh登入自己的服务器，在终端输入（登入成功后默认进入/root目录）：
+```
+ssh user@deployer@example.com
+```
+- 第二步、创建一个裸仓库，仓库名可任意
+```
+git --bare init myblog
+```
+- 第三步、进入裸仓库，配置 hooks/post-receive:
+  - 如果有 `post-receive.sample` 可以执行 `cp post-receive.sample post-receive`，键入下边的代码 (.sample文件是一些示例文件，不起作用)
+  - 如果没有上边的文件可以直接自行创建 `post-receive` 文件，键入如下代码：
+
+  ```
+  $ vi post-receive   # 进入文件，输入字母 `i` 进行输入内容。
+  $ 复制以下内容确认后，键入 `esc` => `:wq`，保存。
+  ```
+
+  ```
+  #!/bin/bash -l
+
+  # Install Ruby Gems to ~/gems
+  export GEM_HOME=/usr/local/gems # gem的安装目录，自行配置（gem environment gemdir 命令可查看）
+  export PATH=$GEM_HOME/bin:$PATH
+
+  GIT_REPO=$HOME/myrepo.git # 裸仓库的地址，自行配置
+  TMP_GIT_CLONE=$HOME/tmp/myrepo 
+  GEMFILE=$TMP_GIT_CLONE/Gemfile
+  PUBLIC_WWW=/var/www/myblog # web服务的地址，自行配置（需先创建）
+
+  git clone $GIT_REPO $TMP_GIT_CLONE
+  BUNDLE_GEMFILE=$GEMFILE bundle install
+  BUNDLE_GEMFILE=$GEMFILE bundle exec jekyll build -s $TMP_GIT_CLONE -d $PUBLIC_WWW
+  rm -Rf $TMP_GIT_CLONE
+  exit
+  ```
+
+  - 保存后，给 post-receive 文件执行权限
+  ```
+  $ chmod +x post-receive
+  ```
+- 第四步、在本地的git仓库添加部署的远端地址
+```
+$ git remote add deploy deployer@example.com:~/myrepo.git # deployer@example.com(用户名及服务器IP或域名)；~/myrepo.git（裸仓库的路径）
+```
+- 第五步、部署。在本地仓库执行推送，然后查看是否成功部署。
+```
+$ git push deploy master
+```
+- 常见错误：
+  - 1、确认已安装`ruby`、`gem`、`jekyll`、`bundle`。并且 `ruby` 版本要高于 `2.3.`。
+  - 2、记得给 post-receive 添加执行权限。
