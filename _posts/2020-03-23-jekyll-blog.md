@@ -1,3 +1,10 @@
+---
+layout: post
+author: lune
+title: jekyll 搭建博客步骤
+excerpt: jekyll 创建及部署博客的步骤。
+---
+
 # 分布教程
 
 ## 1. Setup
@@ -124,7 +131,7 @@ my_number: 5
 
 提取每个页面公共的部分作为模版，作为内容的容器。他们放在 `_layouts` 目录下。在根目录创建一个 `about.md` 文件。
 
-## create a layout
+### create a layout
 
 ```html
 <!DOCTYPE html>
@@ -597,28 +604,38 @@ layout: default
 ```
 
 ## 10. 部署
+
 ### Gemfile
+
 最好为您的网站添加一个 Gemfile。它确保了 Jekyll 和 gems 在不同的环境的版本保持一致。
 在根目录创建一个 Gemfile，输入以下内容：
+
 ```Gemfile
 source 'https://rubygems.org'
 
 gem 'jekyll'
 ```
+
 在终端运行 `bundle install`，这将安装 gem 并创建 Gemfile.lock，该文件将锁定当前 gem 版本以供将来 `bundle install`。如果你想更新 gem 版本可以运行 `bundle update`。
 当使用 Gemfile 时，你将在运行像 `jekyll serve` 这样的命令时,前面加上前缀 `bundle exec`。完整的命令如下：
+
 ```
 bundle exec jekyll serve
 ```
+
 这限制了您的 Ruby 环境只能使用 Gemfile 中设置的 gem。
+
 ### Plugins
+
 Jekyll 插件允许你创建特定于站点的自定义生成内容。
-几乎在所有Jekyll网站上都有三个官方插件可用：
- - [jekyll-sitemap](https://github.com/jekyll/jekyll-sitemap) 创建一个 sitemap 文件帮助搜索引擎索引内容
- - [jekyll-feed](https://github.com/jekyll/jekyll-feed) 为站点文章创建一个 RSS feed
- - [jekyll-seo-tag](https://github.com/jekyll/jekyll-seo-tag) 添加 meta 标签帮助 SEO
+几乎在所有 Jekyll 网站上都有三个官方插件可用：
+
+- [jekyll-sitemap](https://github.com/jekyll/jekyll-sitemap) 创建一个 sitemap 文件帮助搜索引擎索引内容
+- [jekyll-feed](https://github.com/jekyll/jekyll-feed) 为站点文章创建一个 RSS feed
+- [jekyll-seo-tag](https://github.com/jekyll/jekyll-seo-tag) 添加 meta 标签帮助 SEO
 
 为了使用这些插件，首先需要添加他们到 Gemfile。如果你将它们放到 `jekyll_plugins` group，它们将自动的被加载到 Jekyll：
+
 ```Gemfile
 source 'https://rubygems.org'
 
@@ -630,73 +647,87 @@ group :jekyll_plugins do
   gem 'jekyll-seo-tag'
 end
 ```
-之后添加这些行到 `_config.yml`: 
+
+之后添加这些行到 `_config.yml`:
+
 ```yml
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
 ```
+
 现在运行 `bundle update` 来安装它们。（这一步安装包会比较慢，需要等一下）
 `jekyll-sitemap` 不需要任何设置，它会在构建的时候自动生成。
-对于 `jekyll-feed` 和 `jekyll-seo-tag`，您需要将标签添加到 `_layouts / default.html`:
-```html
-<!doctype html>
+对于 `jekyll-feed` 和 `jekyll-seo-tag`，您需要将标签添加到 `_layouts/default.html`:
+
+```txt
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>{{ page.title }}</title>
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    {% feed_meta %}
-    {% seo %}
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+    {% feed_meta %} {% seo %}
   </head>
   <body>
-    {% include navigation.html %}
-    {{ content }}
+    {% include navigation.html %} {{ content }}
   </body>
 </html>
 ```
+
 重启 Jekyll 服务，检查添加到<head>的这些标签。
 
 ### Environments
+
 有时你可能想要在生产环境输出一些内容，开发环境不输出。分析用的脚本是最常见的示例。
 实现这个你可以使用 `environments`。你可以在运行命令时，使用 `JEKYLL_ENV` 环境变量设置环境。例如：
+
 ```
 JEKYLL_ENV=production bundle exec jekyll build
 ```
+
 `JEKYLL_ENV` 默认是 development。您可以在 liquid 中使用 `jekyll.environment` 应用 JEKYLL_ENV。仅在生产环境输出输出分析脚本，添加如下代码：
 
 ```html
 {% if jekyll.environment == "production" %}
-  <script src="my-analytics-script.js"></script>
+<script src="my-analytics-script.js"></script>
 {% endif %}
 ```
 
 ### Deployment
+
 最后一步是将站点添加到生产服务器。最基本的方法是运行生产版本：
+
 ```
 JEKYLL_ENV=production bundle exec jekyll build
 ```
-并将_site的内容复制到您的服务器。
-更好的方法是使用CI或第三方来自动执行此过程。
 
-[使用git hooks(post-receive)实现简单的远程自动部署](https://www.imqianduan.com/git-svn/335.html)
+并将`_site` 的内容复制到您的服务器。
+更好的方法是使用 CI 或第三方来自动执行此过程。
 
-- 第一步、使用ssh登入自己的服务器，在终端输入（登入成功后默认进入/root目录）：
+参考：[使用 git hooks(post-receive)实现简单的远程自动部署](https://www.imqianduan.com/git-svn/335.html)及[官方文档](https://jekyllrb.com/docs/deployment/automated/)
+
+- 第一步、使用 ssh 登入自己的服务器，在终端输入（登入成功后默认进入`/root` 目录）：
+
 ```
 ssh user@deployer@example.com
 ```
+
 - 第二步、创建一个裸仓库，仓库名可任意
+
 ```
 git --bare init myblog
 ```
-- 第三步、进入裸仓库，配置 hooks/post-receive:
-  - 如果有 `post-receive.sample` 可以执行 `cp post-receive.sample post-receive`，键入下边的代码 (.sample文件是一些示例文件，不起作用)
+
+- 第三步、进入裸仓库，配置 `hooks/post-receive`:
+
+  - 如果有 `post-receive.sample` 可以执行 `cp post-receive.sample post-receive`，键入下边的代码 (.sample 文件是一些示例文件，不起作用)
   - 如果没有上边的文件可以直接自行创建 `post-receive` 文件，键入如下代码：
 
   ```
   $ vi post-receive   # 进入文件，输入字母 `i` 进行输入内容。
-  $ 复制以下内容确认后，键入 `esc` => `:wq`，保存。
+  $ # 复制以下内容确认后，键入 `esc` => `:wq`，保存。
   ```
 
   ```
@@ -707,7 +738,7 @@ git --bare init myblog
   export PATH=$GEM_HOME/bin:$PATH
 
   GIT_REPO=$HOME/myrepo.git # 裸仓库的地址，自行配置
-  TMP_GIT_CLONE=$HOME/tmp/myrepo 
+  TMP_GIT_CLONE=$HOME/tmp/myrepo
   GEMFILE=$TMP_GIT_CLONE/Gemfile
   PUBLIC_WWW=/var/www/myblog # web服务的地址，自行配置（需先创建）
 
@@ -719,17 +750,40 @@ git --bare init myblog
   ```
 
   - 保存后，给 post-receive 文件执行权限
+
   ```
   $ chmod +x post-receive
   ```
-- 第四步、在本地的git仓库添加部署的远端地址
+
+- 第四步、在本地的 git 仓库添加部署的远端地址
+
 ```
 $ git remote add deploy deployer@example.com:~/myrepo.git # deployer@example.com(用户名及服务器IP或域名)；~/myrepo.git（裸仓库的路径）
 ```
+
 - 第五步、部署。在本地仓库执行推送，然后查看是否成功部署。
+
 ```
 $ git push deploy master
 ```
+
 - 常见错误：
   - 1、确认已安装`ruby`、`gem`、`jekyll`、`bundle`。并且 `ruby` 版本要高于 `2.3.`。
   - 2、记得给 post-receive 添加执行权限。
+  - 3、
+    ```
+    remote: 正克隆到 '/root/tmp/myrepo'...
+    remote: 完成。
+    remote: hooks/post-receive:行13: bundle: 未找到命令
+    remote: hooks/post-receive:行14: bundle: 未找到命令
+    To *.*.*.*:~/myrepo.git
+    f5d6969..0be15d2  master -> master
+    ```
+    解决办法： 安装 bundle
+  - 4、
+    ```
+    remote: Don't run Bundler as root. Bundler can ask for sudo if it is needed, and
+    remote: installing your bundle as root will break this application for all non-root
+    remote: users on this machine.
+    ```
+    这个问题出现之后就卡住不动了，看到一个[答案](https://stackoverflow.com/questions/55909543/you-must-use-bundler-2-or-greater-with-this-lockfile-when-running-docker-compos)，按答案装了一下就可以了。
