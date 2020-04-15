@@ -129,6 +129,9 @@ excerpt: 日语输入法
 ぃ LI
 ぅ LU
 ぇ LE
+
+
+
 ぉ LO
 ゃ LYA
 ゅ LYU
