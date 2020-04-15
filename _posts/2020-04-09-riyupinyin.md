@@ -2,13 +2,20 @@
 layout: post
 excerpt: 日语输入法
 ---
-清音
+## 清音
+
 あ A
+
 い I
+
 う U
+
 え E
+
 お O
+
 か KA
+
 き KI
 く KU
 け KE
@@ -51,7 +58,7 @@ excerpt: 日语输入法
 わ WA
 を WO
 ん NN
-浊音?半浊音
+## 浊音?半浊音
 が GA
 ぎ GI
 ぐ GU
@@ -77,7 +84,7 @@ excerpt: 日语输入法
 ぷ PU
 ぺ PE
 ぽ PO
-拗音
+## 拗音
 きゃ KYA
 きゅ KYU
 きょ KYO
