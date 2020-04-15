@@ -1,0 +1,21 @@
+.blog-list {
+  padding-left: 0;
+  &__item {
+    margin: 20px 0;
+    padding: 8px 20px;
+    list-style: none;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, .3);
+    border-radius: 10px;
+
+    &__title {
+      text-decoration: none;
+      color: $gray;
+
+      &:visited {
+        
+        color: $orange;
+      }
+    }
+    
+  }
+}

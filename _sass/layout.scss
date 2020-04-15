@@ -1,0 +1,20 @@
+nav {
+  padding: 0 20px;
+  line-height: 60px;
+  text-align: right;
+
+  .current {
+    color: $primary;
+  }
+
+  a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.content {
+  padding: 20px;
+}
+

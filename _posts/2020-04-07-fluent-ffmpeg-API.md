@@ -2,7 +2,7 @@
 layout: post
 author: lune
 title: node-fluent-ffmpeg 文档
-excerpt: 翻译fluent ffmpeg API
+excerpt: 机翻fluent ffmpeg API，方便查看。
 ---
 
 [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
@@ -30,16 +30,20 @@ $ git submodule add git://github.com/schaermu/node-fluent-ffmpeg.git vendor/flue
 
 ## 用法
 
-你将在 examples 文件夹中找到一些有用的例子。
+你将在 [examples](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/tree/master/examples) 文件夹中找到一些有用的例子。
 
 ### 先决条件
 
 #### ffmpeg and ffprobe
 
 fluent-ffmpeg 需要 ffmpeg> = 0.9 才能工作。它可能与以前的版本一起使用，但是一些功能将不可用（并且不再对库进行较低版本的测试）。
+
 如果设置了 FFMPEG_PATH 环境变量，fluent-ffmpeg 会将其用作 ffmpeg 可执行文件的完整路径。否则，它将尝试直接调用 ffmpeg（因此它应该在您的 PATH 中）。您还必须安装 ffprobe（大多数发行版随附 ffmpeg）。同样，fluent-ffmpeg 将使用 FFPROBE_PATH 环境变量（如果已设置），否则它将尝试在 PATH 中调用它。
+
 当使用 avconv 和 avprobe 而不是 ffmpeg 和 ffprobe 时，大多数功能都可以使用，但是目前尚不正式支持。
+
 **Windows 用户**：ffmpeg 和 ffprobe 很可能不在您的％PATH 中，因此您必须设置％FFMPEG_PATH 和％FFPROBE_PATH。
+
 **Debian / Ubuntu 用户**：官方存储库在 libav-tools 软件包中具有 ffmpeg / ffprobe 可执行文件，并且它们实际上是重命名为 avconv / avprobe 可执行文件（avconv 是 ffmpeg 的分支）。它们应该基本兼容，但是如果您遇到任何问题，则可能要使用真正的 ffmpeg。您可以从源代码编译它，也可以在https://ffmpeg.org/download.html上找到预构建的.deb包（对于Ubuntu，ppa：mc3man / trusty-media PPA 提供了最新的版本）。
 
 #### flvtool2 or flvmeta
@@ -85,7 +89,7 @@ var command = ffmpeg('/path/to/file.avi', { option: "value", ... });
 - `timeout`: ffmpeg 超时（以秒为单位）（默认为无超时）
 - `preset` 或 `presets`: 用于从中加载模块预设的目录（默认为 fluent-ffmpeg 树中的 lib / presets 目录）
 - `niceness` 或 `priority`: ffmpeg 优美度值，介于-20 和 20 之间；在 Windows 平台上被忽略（默认为 0）
-- `logger`: 带有 debug（），info（），warn（）和 error（）方法的记录器对象（默认为不记录）
+- `logger`: 带有 debug()，info()，warn()和 error()方法的记录器对象（默认为不记录）
 - `stdoutLines`: ffmpeg stdout / stderr 在内存中保留的最大行数（默认为 100，使用 0 表示无限存储）
 
 ### Specifying inputs
@@ -558,8 +562,11 @@ ffmpeg('/path/to/file.avi').keepDAR()
 
 **Aliases**: `addOutput()`
 将输出添加到命令。`target` 参数可以是输出文件名或可写流（但单个命令最多可以使用一个输出流）。
+
 当`target`是流时，可以传递其他`options`对象。如果存在，它将通过 ffmpeg 输出流`pipe()`方法传递。
+
 添加输出将切换命令的“当前输出”，以便将应用于该输出的任何 fluent-ffmpeg 方法确实应用于最后添加的输出。出于向后兼容的原因，您最好在添加第一个输出之前调用这些方法（在这种情况下，它们将在添加第一个输出时应用于第一个输出）。适用于输出的方法是所有与输入无关的方法，但`complexFilter()`是全局的。
+
 还要注意，在调用`output()`时，不应使用`save()`或`stream()`（以前称为 saveToFile（）和 writeToStream（））方法，因为它们已经添加了输出。使用`run()`方法开始处理。
 
 ```js
